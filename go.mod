@@ -7,6 +7,7 @@ require (
 	github.com/go-kit/kit v0.10.0
 	github.com/gogo/protobuf v1.2.2-0.20190601103108-21df5aa0e680
 	github.com/gorilla/mux v1.8.0
+	github.com/jteeuwen/go-bindata v3.0.7+incompatible // indirect
 	github.com/kevinburke/go-bindata v3.22.0+incompatible // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/moul/http2curl v1.0.0
