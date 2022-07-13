@@ -31,7 +31,7 @@ var ServerDecodeTemplate = `
 			}
 		}
 
-		pathParams := mux.Vars(r)
+		pathParams := encodePathParams(mux.Vars(r))
 		_ = pathParams
 
 		queryParams := r.URL.Query()
@@ -106,7 +106,10 @@ var (
 
 // MakeHTTPHandler returns a handler that makes a set of endpoints available
 // on predefined paths.
-func MakeHTTPHandler(endpoints Endpoints, options ...httptransport.ServerOption) http.Handler {
+func MakeHTTPHandler(endpoints Endpoints, responseEncoder httptransport.EncodeResponseFunc, options ...httptransport.ServerOption) http.Handler {
+	if responseEncoder == nil {
+		responseEncoder = EncodeHTTPGenericResponse
+	}
 	{{- if .HTTPHelper.Methods}}
 		serverOptions := []httptransport.ServerOption{
 			httptransport.ServerBefore(headersToContext),
@@ -124,9 +127,9 @@ func MakeHTTPHandler(endpoints Endpoints, options ...httptransport.ServerOption)
 			} else {
 				m.Methods("{{$binding.Verb | ToUpper}}").Path("{{$binding.PathTemplate}}").Handler(httptransport.NewServer(
 					endpoints.{{$method.Name}}Endpoint,
-					endpoints.GetHttpRequestDecoder("{{$method.Name}}", DecodeHTTP{{$binding.Label}}Request),
-					endpoints.GetHttpResponseEncoder("{{$method.Name}}", EncodeHTTPGenericResponse),
-					append(serverOptions, endpoints.GetHttpServerOptions("{{$method.Name}}")...)...,
+					DecodeHTTP{{$binding.Label}}Request,
+					responseEncoder,
+					serverOptions...,
 				))
 			}
 		{{- end}}

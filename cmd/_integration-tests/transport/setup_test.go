@@ -65,7 +65,7 @@ func TestMain(m *testing.M) {
 	endpoints.CustomVerbEndpoint = CustomVerbE
 
 	// http test server
-	h := svc.MakeHTTPHandler(endpoints)
+	h := svc.MakeHTTPHandler(endpoints, svc.EncodeHTTPGenericResponse)
 	httpTestServer := httptest.NewServer(h)
 
 	// grpc test server
