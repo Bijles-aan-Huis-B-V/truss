@@ -1,58 +1,28 @@
-# Truss ![Build Status](https://github.com/metaverse/truss/workflows/Go/badge.svg?branch=master)
+# Truss (Deprecated Fork)
 
-Truss handles the painful parts of services, freeing you to focus on the
-business logic.
+> **This is a deprecated fork.** The original repository is no longer maintained. We plan to archive this once booking-service, user-service, and translation-service are migrated to Echo.
 
-![Everything all the time forever](http://i.imgur.com/FtvVeBG.jpg)
+## Overview
 
-## Install
+Go CLI tool that generates gRPC microservices with go-kit from Protocol Buffer definitions. Users define services in `.proto` files and Truss generates a complete service scaffold including gRPC/HTTP transports, endpoints, clients, and handler stubs. Key feature: smart handler preservation — user-written business logic survives regeneration.
 
-Currently, there is no binary distribution of Truss, you must install from
-source.
+## Why We're Moving Away
 
-To install this software, you must:
+While the concept of generating both proto and HTTP services from a single proto file is elegant in theory, in practice it has significant drawbacks:
+- Reading from HTTP headers or cookies is extremely painful
+- Maintenance burden with no upstream support
+- Single handler function per endpoint limits flexibility
+- Generated code is hard to debug
 
-1. Install protoc 3 or newer. The easiest way is to
-download a release from [github](https://github.com/google/protobuf/releases)
-and add to `$PATH`.
-Otherwise [install from source.](https://github.com/google/protobuf)
-1. Install Truss with
+## Services Still Using Truss
 
-	```
-	go get -u -d github.com/metaverse/truss
-	cd $GOPATH/src/github.com/metaverse/truss
-	make dependencies
-	make
-	```
-	On Windows, do the following instead:
-	```
-	go get -u -d github.com/metaverse/truss
-	cd %GOPATH%/src/github.com/metaverse/truss
-	wininstall.bat
-	```
+- booking-service
+- user-service
+- translation-service
 
-## Usage
+## Build
 
-Using Truss is easy. You define your service with [gRPC](http://www.grpc.io/)
-and [protoc buffers](https://developers.google.com/protocol-buffers/docs/proto3),
-and Truss uses that definition to create an entire service. You can even
-add [http annotations](
-https://github.com/googleapis/googleapis/blob/928a151b2f871b4239b7707e1bb59258df3fe10a/google/api/http.proto#L36)
-for HTTP 1.1/JSON transport!
-
-Then you open the `handlers/handlers.go`,
-add you business logic, and you're good to go.
-
-Here is an example service definition: [Echo Service](./_example/echo.proto)
-
-Try Truss for yourself on Echo Service to see the service that is generated:
-
+```bash
+make                    # Build truss
+make test               # Run all tests
 ```
-truss _example/echo.proto
-```
-
-See [USAGE.md](./USAGE.md) and [TUTORIAL.md](./TUTORIAL.md) for more details.
-
-## Developing
-
-See [DEVELOPING.md](./DEVELOPING.md) for details.
