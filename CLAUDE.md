@@ -4,16 +4,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
+**This is a deprecated fork.** The original Truss repo is no longer maintained. This fork will be archived once booking-service, user-service, and translation-service are migrated to Echo.
+
 Truss is a Go CLI tool that generates gRPC microservices with go-kit from Protocol Buffer definitions. Users define services in `.proto` files (with HTTP annotations) and Truss generates a complete service scaffold including gRPC/HTTP transports, endpoints, clients, and handler stubs. A key feature is **smart handler preservation**: user-written business logic in `handlers/` survives regeneration via Go AST parsing.
 
 ## Build Commands
 
 ```bash
-make                    # Build truss (runs gobindata + go install)
+make                    # Build truss (runs gobindata + go install). Default target is `truss`.
 make dependencies       # Install protoc plugins (protoc-gen-gogo, go-bindata)
 make gobindata          # Recompile template files into Go binary data (required after template changes)
 make truss              # Build CLI binary with version/date ldflags
 ```
+
+`GO111MODULE=on` is required for tests; the Makefile sets this automatically.
 
 ## Test Commands
 
